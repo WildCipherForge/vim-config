@@ -15,3 +15,6 @@ set backspace=indent,eol,start
 
 syntax on
 
+autocmd BufNewFile,BufRead *.css  setlocal filetype=css
+autocmd BufNewFile,BufRead *.scss setlocal filetype=scss
+autocmd BufNewFile,BufRead *.less setlocal filetype=less

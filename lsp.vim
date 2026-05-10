@@ -1,50 +1,65 @@
 " Enable diagnostics highlighting
-let lspOpts = #{autoHighlightDiags: v:true}
+let lspOpts = #{
+    \   autoHighlightDiags: v:true,
+    \   snippetSupport: v:true,
+    \   logfile: '/tmp/lsp-html.log'
+    \ }
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 let lspServers = [
-      \ #{
-      \   name: 'rust-analyzer',
-      \   filetype: ['rust'],
-      \   path: 'rust-analyzer',
-      \   args: []
-      \ },
-      \ #{
-      \   name: 'jdtls',
-      \   filetype: ['java'],
-      \   path: 'jdtls',
-      \   args: ['--jvm-arg=-Dlog.level=ALL']
-      \ },
-      \ #{
-      \   name: 'intelephense',
-      \   filetype: ['php'],
-      \   path: 'intelephense',
-      \   args: ['--stdio']
-      \ },
-      \ #{
-      \   name: 'pylsp',
-      \   filetype: ['python'],
-      \   path: 'pylsp',
-      \   args: []
-      \ },
-      \ #{
-      \   name: 'html-ls',
-      \   filetype: ['html'],
-      \   path: 'vscode-html-language-server',
-      \   args: ['--stdio']
-      \ },
-      \ #{
-      \   name: 'css-ls',
-      \   filetype: ['css', 'scss'],
-      \   path: 'vscode-css-language-server',
-      \   args: ['--stdio']
-      \ },
-      \ #{
-      \   name: 'lemminx',
-      \   filetype: ['xml'],
-      \   path: 'lemminx',
-      \   args: []
-      \ }
-      \ ]
+    \ #{
+    \   name: 'rust-analyzer',
+    \   filetype: ['rust'],
+    \   path: 'rust-analyzer',
+    \   args: []
+    \ },
+    \ #{
+    \   name: 'jdtls',
+    \   filetype: ['java'],
+    \   path: 'jdtls',
+    \   args: ['--jvm-arg=-Dlog.level=ALL']
+    \ },
+    \ #{
+    \   name: 'intelephense',
+    \   filetype: ['php'],
+    \   path: 'intelephense',
+    \   args: ['--stdio']
+    \ },
+    \ #{
+    \   name: 'pylsp',
+    \   filetype: ['python'],
+    \   path: 'pylsp',
+    \   args: []
+    \ },
+    \ #{
+    \   name: 'html-ls',
+    \   filetype: ['html'],
+    \   path: 'vscode-html-language-server',
+    \   args: ['--stdio'],
+    \   initializationOptions: #{
+    \     provideFormatter: v:true,
+    \     embeddedLanguages: #{
+    \       css: v:true,
+    \       javascript: v:true
+    \     },
+    \     configurationSection: ['html', 'css', 'javascript']
+    \   }
+    \ },
+    \#{
+    \   name: 'css-ls',
+    \   filetype: ['css', 'scss', 'less'],
+    \   path: 'vscode-css-language-server',
+    \   args: ['--stdio'],
+    \   initializationOptions: #{
+    \     provideFormatter: v:true
+    \   }
+    \ },
+    \ #{
+    \   name: 'lemminx',
+    \   filetype: ['xml', 'dtd', 'xsd', 'xls'],
+    \   path: 'lemminx',
+    \   args: []
+    \ }
+    \ ]
 
 autocmd User LspSetup call LspAddServer(lspServers)
 
@@ -58,7 +73,7 @@ nnoremap <leader>pd :LspDiag prev \| LspDiag current<CR>
 inoremap <silent> <C-Space> <C-x><C-o>
 
 " Set omnifunc for completion
-autocmd FileType php setlocal omnifunc=lsp#complete
+autocmd FileType php,python,java,html,css,scss,less,xml setlocal omnifunc=lsp#complete
 
 " Custom diagnostic sign characters
 autocmd User LspSetup call LspOptionsSet(#{
